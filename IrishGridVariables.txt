@@ -1,12 +1,12 @@
 All following variables are 0.
 e
 m
-n
+*n
 k
 r
 pi
-deg2rad
-lambda
+*deg2rad
+*lambda
 lambda0
 y0
 q
@@ -17,10 +17,59 @@ dl
 d
 rdy
 tsin
-phi
+*phi
 
+latRad
+lonRad
+a
+b
+tx
+ty
+ry
+rz
+s1
+lat0
+lon0
+N0
+E0
 
-
+N0
+sinPhi
+sinLambda
+H
+eSq
+nu
+x1
+y1
+z1
+x2
+y2
+z2
+precision
+p
+cosLat
+rho
+eta2
+Ma
+Mb
+Mc
+cos3lat
+cos5lat
+tan2lat
+tan4lat
+I
+II
+III
+IV
+V
+VI
+dLon
+dLon2
+N
+E
+digits
+es
+ns
 ============= Code fr/* While in sport mode do this once per second */
 /* 
   Convert Lat/Long values to RD values
