@@ -11,11 +11,15 @@ var deg2rad = pi/180;
 
 var lat=SUUNTO_GPS_LATITUDE;
 var lon=SUUNTO_GPS_LONGITUDE;
-
-
-var lat = 52.9668366960;
-var lon = -6.4637116624;
-
+/* Locationof OSO
+lat =  53+21/60+50.5441/3600;
+lon = -(6+20/60+52.9181/3600);
+*/
+/* spot on
+lat =  53+21/60+50.5441/3600;
+lon = -(6+20/60+52.9181/3600);
+ */
+ 
 /*
 var lat = 52.9668366960;
 var lon = -6.4637116624;
@@ -131,40 +135,27 @@ var dLon6 = dLon5*dLon;
 
   var N = I + II*dLon2 + III*dLon4 + IIIA*dLon6;
   var E = E0 + IV*dLon + V*dLon3 + VI*dLon5;
-
+/*
   E = Math.floor((Suunto.mod(E,10000000))/Math.pow(10,5-digits/2));
   N = Math.floor((Suunto.mod(N,10000000))/Math.pow(10,5-digits/2));
-
-var gridRef;
-/*
-gridRef = Suunto.mod(E,1000)*1000+Suunto.mod(N,1000);
 */
-gridRef = Suunto.mod(E,100)+Suunto.mod(N,100)/100;
-prefix="Bat: ";
- postfix="%";
+  E = Math.round((Suunto.mod(E,10000000))/Math.pow(10,5-digits/2));
+  N = Math.round((Suunto.mod(N,10000000))/Math.pow(10,5-digits/2));
+
+/*
+var gridRef = Suunto.mod(E,100)+Suunto.mod(N,100)/100;
+
+prefix="Bat:";
+postfix="%";
+*/
+/*
+var gridRef = Suunto.mod(E/100,1000)*1000+Suunto.mod(N/100,1000);
+*/
+var gridRef = Suunto.mod(E,1000)*1000+Suunto.mod(N,1000);
   
 RESULT = gridRef;
 
-/*
-secs = secs + 1;
-if (SUUNTO_GPS_STATE < 100){
-  RESULT = SUUNTO_GPS_STATE;
-    prefix="GPS";
-    postfix="%";
-}else if (secs <= 4){
- RESULT = E; 
- prefix="E";
- postfix="";
-}else if (secs > 4 && secs <= 8){
-  RESULT = N;
-  prefix="N";
- postfix="";
-}else if (secs > 8 ) {
- 
-  RESULT = N;
- prefix="N";
- postfix="";
-  
- secs = 0;
-}
-*/
+
+
+prefix="ig";
+
