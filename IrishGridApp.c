@@ -1,24 +1,28 @@
-/* While in sport mode do this once per second */
 /* 
-  Convert Lat/Long values to RD values
-  "RijksDriehoeksmeting"-coordinates
-  For the X and the Y coordinate there are separate apps
-  This one is for the RD-Y coordinate
-  INPUT: SUUNTO_GPS_LATITUDE, SUUNTO_GPS_LONGITUDE
-  RESULT: RDY
+  Convert Lat/Long values to IR Grid values
   Lugnaquilla: N 52.96712 / -6.46464 => 303207 / 191773
+  Show the area within the current square
 */
-var digits = 8;
+var digits = 6;
 
-var pi = 3.14159265358979;
+
+var pi = 3.141592653589793238462643383279;
 var deg2rad = pi/180;
 
-/*
 var lat=SUUNTO_GPS_LATITUDE;
 var lon=SUUNTO_GPS_LONGITUDE;
+
+
+var lat = 52.9668366960;
+var lon = -6.4637116624;
+
+/*
+var lat = 52.9668366960;
+var lon = -6.4637116624;
+
+var lat = 54.75408;
+var lon = -8.08118;
 */
-var lat = 52.96712;
-var lon = -6.46464;
 
 var latRad = lat * deg2rad; 
 var lonRad = lon * deg2rad;
@@ -99,31 +103,18 @@ var sinLat = Math.sin(latRad);
   var rho = a*F0*(1-eSq)/Math.pow(1-eSq*sinLat*sinLat, 1.5);  
   var eta2 = nu/rho-1;
 
-
   var Ma = (1 + n + (5/4)*n2 + (5/4)*n3) * (latRad-lat0);
-  var Mb = (3*n + 3*n*n + (21/8)*n3) * Math.sin(latRad-lat0) * Math.cos(latRad+lat0);
+  var Mb = (3*n + 3*n*n + (21/8)*n3) * Suunto.sin(latRad-lat0) * Suunto.cos(latRad+lat0);
   var Mc = ((15/8)*n2 + (15/8)*n3) * Math.sin(2*(latRad-lat0)) * Math.cos(2*(latRad+lat0));
   var Md = (35/24)*n3 * Math.sin(3*(latRad-lat0)) * Math.cos(3*(latRad+lat0));
-  var M = b * F0 * (Ma - Mb + Mc - Md);              
-/* n 0.001673220384152102 GOOD */
-/* n2 0.000002799666453942108 GOOD */
-/* latRad 0.9244456947119299 GOOD */
-/*lat0 0.9337511498169663 GOOD */
-/*Mb  0.000013262492645875477 XX*/
-/*Mc  8.212845405154541e-8 XX*/
-/*Md   -1.447834787272973e-10 XX*/
 
-
+var M = b * F0 * (Ma - Mb + Mc - Md);
   var cos3lat = cosLat*cosLat*cosLat;
   var cos5lat = cos3lat*cosLat*cosLat;
   var tan2lat = Math.tan(latRad)*Math.tan(latRad);
   var tan4lat = tan2lat*tan2lat;
 
-
-/* M -59330.814905801046 */
-
   var I = M + N0;
-
 	var II = (nu/2)*sinLat*cosLat;
   var III = (nu/24)*sinLat*cos3lat*(5-tan2lat+9*eta2);
   var IIIA = (nu/720)*sinLat*cos5lat*(61-58*tan2lat+tan4lat);
@@ -131,8 +122,6 @@ var sinLat = Math.sin(latRad);
   var V = (nu/6)*cos3lat*(nu/rho-tan2lat);
   var VI = (nu/120) * cos5lat * (5 - 18*tan2lat + tan4lat + 14*eta2 - 58*tan2lat*eta2);
 
-
-/* I should be 190669.185094198 GOOD*/
   var dLon = lonRad-lon0;
   var dLon2 = dLon*dLon;
 var dLon3 = dLon2*dLon;
@@ -143,41 +132,19 @@ var dLon6 = dLon5*dLon;
   var N = I + II*dLon2 + III*dLon4 + IIIA*dLon6;
   var E = E0 + IV*dLon + V*dLon3 + VI*dLon5;
 
-  
-/*RESULT = Suunto.mod(N/10,10000);*/
-/* RESULT = Suunto.mod(E/10,10000); */
-
   E = Math.floor((Suunto.mod(E,10000000))/Math.pow(10,5-digits/2));
   N = Math.floor((Suunto.mod(N,10000000))/Math.pow(10,5-digits/2));
 
-
-
-
-/* pick the 3 most significant digits */
-E = Suunto.mod(E/1000,10000);
-N = Suunto.mod(N/100,100);
-
-var gridRef = E * 1000 ;
+var gridRef;
 /*
-if(E < 100){
-	Esz = "0";
-}
+gridRef = Suunto.mod(E,1000)*1000+Suunto.mod(N,1000);
 */
-RESULT=N;
+gridRef = Suunto.mod(E,100)+Suunto.mod(N,100)/100;
+prefix="Bat: ";
+ postfix="%";
+  
+RESULT = gridRef;
 
-
-
-/*
-  var es = E.toString();
-   
-
-  for (var i=0; i<(digits/2)-es.length; i++) es = '0' + es;
-
-  var ns = N.toString();
-  for (var i=0; i<(digits/2)-ns.length; i++) ns = '0' + ns;
-
-  var gridRef = es + ns;
-*/
 /*
 secs = secs + 1;
 if (SUUNTO_GPS_STATE < 100){
@@ -201,33 +168,3 @@ if (SUUNTO_GPS_STATE < 100){
  secs = 0;
 }
 */
-
-
-
-/*John Costigan code End*/
-/*
-e = 0.081696831222;   
-m = 0.003773953832;  
-n = 1.00047585668;   
-k = 0.9999079;      
-r = 6382644.571;
-pi= 3.141592653589793;
-
-lambda0 = 5.387638889 * deg2rad;
-y0 = 463000.0;
-
-phi=SUUNTO_GPS_LATITUDE * deg2rad;
-lambda=SUUNTO_GPS_LONGITUDE * deg2rad;
-
-tsin = Suunto.sin(phi);
-q = 0.5*Suunto.log((1+tsin)/(1-tsin)) - (e * 0.5*Suunto.log((1+(e*tsin))/(1-(e*tsin))));
-w = n * q + m;
-b = 2*Suunto.atan2(Suunto.exp(w),1) - pi/2;  
-b0= 52.121097249 * deg2rad;
-
-dl = n * (lambda - lambda0);
-d = 1 + Suunto.sin(b) * Suunto.sin(b0) + Suunto.cos(b) * Suunto.cos(b0) * Suunto.cos(dl);
-rdy = 2 * k * r * ((Suunto.sin(b) * Suunto.cos(b0) - Suunto.cos(b) * Suunto.sin(b0) * Suunto.cos(dl)) / d) + y0;
-
-RESULT=rdy;
-  */
