@@ -142,20 +142,23 @@ var dLon6 = dLon5*dLon;
   E = Math.round((Suunto.mod(E,10000000))/Math.pow(10,5-digits/2));
   N = Math.round((Suunto.mod(N,10000000))/Math.pow(10,5-digits/2));
 
-/*
+
+/*  GOOD
+Give a 6-figure grid reference pin-pointing 100 m2 in and 100 km.
+This gives an an area that is 1/10 of the grid square.
+var gridRef = Suunto.mod(E,1000)*1000+Suunto.mod(N,1000);
+*/
+
+/* 
+Give a 6-figure grid reference pin-pointing 100 m2 in and 10 km2 area.
+Remove the most signifcant figure, leaving two digits which are the second 
+digit of the margins and the place within 1/10 of the grid square. 
+*/
 var gridRef = Suunto.mod(E,100)+Suunto.mod(N,100)/100;
 
-prefix="Bat:";
-postfix="%";
-*/
-/*
-var gridRef = Suunto.mod(E/100,1000)*1000+Suunto.mod(N/100,1000);
-*/
-var gridRef = Suunto.mod(E,1000)*1000+Suunto.mod(N,1000);
   
 RESULT = gridRef;
 
 
 
-prefix="ig";
 
