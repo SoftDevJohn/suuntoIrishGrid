@@ -1,0 +1,10 @@
+Name: IR Grid
+Activity: Orienteering
+Publicity: Private
+Category: Guidance
+Description: 
+Calculate the Irish Grid Reference from Lat/Lon
+
+Format: 2 decimals
+Prefix: Bat
+Postfix: %
