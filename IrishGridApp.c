@@ -1,7 +1,9 @@
 /* 
-  Convert Lat/Long values to IR Grid values
+  Convert Lat/Long values to Irish Grid Reference values
+  Example:
   Lugnaquilla: N 52.96712 / -6.46464 => 303207 / 191773
-  Show the area within the current square
+  Lugnaquilla: N 52.96712 / -6.46464 => 32.17 (to the nearest 100 m2 using 4 digits, 
+  by losing the most significant digit of the Easting and Northing)
 */
 var digits = 6;
 
